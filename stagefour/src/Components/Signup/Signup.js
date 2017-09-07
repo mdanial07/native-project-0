@@ -157,6 +157,25 @@ class Signup extends Component {
                         <Button block rounded style={{ marginTop: 20, backgroundColor: 'rgba(255,255,255, 0.3 )', padding: 10, width: 240 }} onPress={this.createAnAccount}>
                             <Text style={{ color: '#fff', }} >Sign up</Text>
                         </Button>
+                        {
+                        (this.props.signup)?
+                        this.props.signup.map((user, i) => {
+                            console.log(user.fname)
+                            return (<View key={i}>
+                                            <Text style={{ color: '#fff' }}>{user.fname}</Text>
+                                {/* {keys.users.map((p, i) => {
+                                    return (
+                                        <View key={i + 1}>
+                                            <Text >{p.fname}</Text>
+                                            <Text >{p.email}</Text>
+                                        </View>
+                                    )
+                                })} */}
+                            </View>
+                            )
+                        })
+                        :null
+                        }
                         <Text style={{ color: '#fff', fontSize: 12, textAlign: 'center', marginTop: 10 }}> Forgot your login details?<Text style={{ fontWeight: 'bold', }}> Get login help.</Text> </Text>
                     </Content>
                     <Footer style={{ height: 100 }}>

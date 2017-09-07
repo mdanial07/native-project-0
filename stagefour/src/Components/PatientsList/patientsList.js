@@ -12,19 +12,36 @@ import {
     Tabs,
     Tab, TabHeading
 } from 'native-base';
+import { connect } from "react-redux";
 
 import { View, Text, Button, TextInput, AsyncStorage, Image,StyleSheet } from "react-native"
 import DatePicker from 'react-native-datepicker'
 import Signup from '../Signup/Signup'
 
+import { PatientsMiddleware } from '../../store/middlewares/patientsMiddleware';
+
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getAllPatietns: () => dispatch(PatientsMiddleware.getAllPatietns()),
+
+    }
+}
+function mapStateToProps(state) {
+    return {
+        patients: state.Patients.patient,
+    }
+}
+
 class PatientList extends Component {
 
-    constructor(props) {
-        super(props);
-        var today = new Date();
-        var todayDate = today.toISOString().substring(0, 10);
-        this.state = { email: '', pass: '', patients: [], search: '', date: todayDate, }
-    }
+    // constructor(props) {
+    //     super(props);
+    //     var today = new Date();
+    //     var todayDate = today.toISOString().substring(0, 10);
+    //     this.state = { email: '', pass: '', patients: [], search: '', date: todayDate, }
+    // }
 
     static navigationOptions = {
         title:'Patients',        
@@ -32,49 +49,54 @@ class PatientList extends Component {
     }
 
     componentWillMount() {
-        console.disableYellowBox = true;
+
+        this.props.getAllPatietns();
         
-        AsyncStorage.getItem('abc123', (err, result) => {
-            if (result !== null) {
-                let data = JSON.parse(result);
-                this.setState({ patients: data });
-                console.log(this.state.patients);
-            }
-        });
-        this.setState({ date: '' })
-        console.log(this.state.date)
+
+        // console.disableYellowBox = true;
+        
+        // AsyncStorage.getItem('abc123', (err, result) => {
+        //     if (result !== null) {
+        //         let data = JSON.parse(result);
+        //         this.setState({ patients: data });
+        //         console.log(this.state.patients);
+        //     }
+        // });
+        // this.setState({ date: '' })
+        // console.log(this.state.date)
     }
 
-    componentWillReceiveProps() {
-        AsyncStorage.getItem('abc123', (err, result) => {
-            if (result !== null) {
-                let data = JSON.parse(result);
-                this.setState({ patients: data });
-                console.log(this.state.patients);
-            }
-        });
-        this.setState({ date: '' })
-        console.log(this.state.date)
-    }
+    // componentWillReceiveProps() {
+    //     AsyncStorage.getItem('abc123', (err, result) => {
+    //         if (result !== null) {
+    //             let data = JSON.parse(result);
+    //             this.setState({ patients: data });
+    //             console.log(this.state.patients);
+    //         }
+    //     });
+    //     this.setState({ date: '' })
+    //     console.log(this.state.date)
+    // }
 
 
     render() {
 
-        let patientsbyName = this.state.patients.filter((patient) => {
-            return (
-                patient.pname.toLocaleLowerCase().indexOf(this.state.search.toLocaleLowerCase()) !== -1
-            )
-        });
+        // let patientsbyName = this.state.patients.filter((patient) => {
+        //     return (
+        //         patient.pname.toLocaleLowerCase().indexOf(this.state.search.toLocaleLowerCase()) !== -1
+        //     )
+        // });
 
-        let patientsbyDate = this.state.patients.filter((patient) => {
-            return (
-                patient.date.toLocaleLowerCase().indexOf(this.state.date.toLocaleLowerCase()) !== -1
-            )
-        });
+        // let patientsbyDate = this.state.patients.filter((patient) => {
+        //     return (
+        //         patient.date.toLocaleLowerCase().indexOf(this.state.date.toLocaleLowerCase()) !== -1
+        //     )
+        // });
+        console.log(this.props.patients)
 
         return (
             <View>
-                    <Tabs>
+                    {/* <Tabs>
                         <Tab heading={ <TabHeading><Icon name="ios-search-outline" /><Text style={{color:'#fff'}}> Search by Name</Text></TabHeading>} >
                             <Header searchBar rounded>
                                 <Item>
@@ -128,13 +150,12 @@ class PatientList extends Component {
                                             dateInput: {
                                                 marginLeft: 36
                                             }
-                                            // ... You can check the source to find the other keys.
+                                            
                                         }}
                                         onDateChange={(d) => { this.setState({ date: d }) }}
                                     />
                                     <Icon name="ios-search" />
-                                    {/* <Input placeholder="Search" onChangeText={(search) => this.setState({ search })} />
-                                    <Icon name="ios-people" /> */}
+                                    
                                 </Item>
                             </Header>
                             <List>
@@ -160,7 +181,7 @@ class PatientList extends Component {
                                 }
                             </List>
                         </Tab>
-                    </Tabs>
+                    </Tabs> */}
                     {/* 
                             <ListItem avatar>
                                 <Body>
@@ -230,5 +251,7 @@ class PatientList extends Component {
         )
     }
 }
-export default PatientList;
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientList)
 

@@ -2,7 +2,22 @@ import React, { Component } from 'react'
 import { Container, Header, Content, Form, Item, Input, Label, Card, CardItem, Body, Button, Toast } from 'native-base';
 import { View, Text, AsyncStorage, StyleSheet, Image } from "react-native"
 import DatePicker from 'react-native-datepicker'
-import Hr from 'react-native-hr';
+import { connect } from "react-redux";
+import { PatientsMiddleware } from '../../store/middlewares/patientsMiddleware';
+
+// import Hr from 'react-native-hr';
+
+function mapDispatchToProps(dispatch) {
+    return {
+        createPatient: (users) => dispatch(PatientsMiddleware.createPatient(users)),
+    }
+}
+function mapStateToProps(state) {
+    return {
+        signup: state.Signup.signup,
+    }
+}
+
 
 class PatientRegForm extends Component {
 
@@ -29,54 +44,65 @@ class PatientRegForm extends Component {
     componentWillMount() {
         console.disableYellowBox = true;
 
-        AsyncStorage.getItem('abc123', (err, result) => {
-            if (result !== null) {
-                let data = JSON.parse(result);
-                this.setState({ patient: data });
-                console.log(this.state.patient, 'dadadadada');
-                // AsyncStorage.removeItem('abc123', result);   
-            }
-        });
+        // AsyncStorage.getItem('abc123', (err, result) => {
+        //     if (result !== null) {
+        //         let data = JSON.parse(result);
+        //         this.setState({ patient: data });
+        //         console.log(this.state.patient, 'dadadadada');
+        //         // AsyncStorage.removeItem('abc123', result);   
+        //     }
+        // });
 
     }
 
     addPatient = () => {
 
-        var patients = this.state.patient;
-        // this.setState({ patient: patients })
-        if (this.state.pname == '' || this.state.dis == '' || this.state.med == '' || this.state.cost == '') {
-            // console.log(this.props, "props")
+        var obj = {
+            pname: this.state.pname,
+            dis: this.state.dis,
+            med: this.state.med,
+            cost: this.state.cost,
+            // date: this.state.date,
+        }
 
-            Toast.show({
-                text: 'Please fill form !',
-                position: 'bottom',
-                buttonText: 'Okay'
-            });
-        }
-        else {
-            var obj = {
-                pname: this.state.pname,
-                dis: this.state.dis,
-                med: this.state.med,
-                cost: this.state.cost,
-                date: this.state.date,
-            }
-            patients.push(obj)
-            console.log(patients);
-            AsyncStorage.setItem('abc123', JSON.stringify(patients));
-            Toast.show({
-                text: 'Patient has been added !',
-                position: 'bottom',
-                buttonText: 'Okay'
-            });
-            this.setState({
-                pname: '',
-                dis: '',
-                med: '',
-                cost: '',
-            })
-            // this.props.navigation.navigate('patientRoute');
-        }
+        this.props.createPatient(obj)
+        
+
+        // var patients = this.state.patient;
+        // // this.setState({ patient: patients })
+        // if (this.state.pname == '' || this.state.dis == '' || this.state.med == '' || this.state.cost == '') {
+        //     // console.log(this.props, "props")
+
+        //     Toast.show({
+        //         text: 'Please fill form !',
+        //         position: 'bottom',
+        //         buttonText: 'Okay'
+        //     });
+        // }
+        // else {
+        //     var obj = {
+        //         pname: this.state.pname,
+        //         dis: this.state.dis,
+        //         med: this.state.med,
+        //         cost: this.state.cost,
+        //         // date: this.state.date,
+        //     }
+        //     patients.push(obj)
+        //     console.log(patients);
+        //     AsyncStorage.setItem('abc123', JSON.stringify(patients));
+        //     Toast.show({
+        //         text: 'Patient has been added !',
+        //         position: 'bottom',
+        //         buttonText: 'Okay'
+        //     });
+        //     this.setState({
+        //         pname: '',
+        //         dis: '',
+        //         med: '',
+        //         cost: '',
+        //     })
+        //     // this.props.navigation.navigate('patientRoute');
+        // }
 
 
     }
@@ -89,12 +115,12 @@ class PatientRegForm extends Component {
                     <Card style={{ width: 300, marginTop: '10%' }}>
                         <CardItem>
                             <Body>
-                                <Hr lineColor='#b3b3b3' text='Registration Form' textColor='steelblue'
+                                {/* <Hr lineColor='#b3b3b3' text='Registration Form' textColor='steelblue'
                                     textStyle={{
                                         color: "red",
                                         height: 20,
 
-                                    }} />
+                                    }} /> */}
                                 <Item floatingLabel style={{ marginTop: 10 }}>
                                     <Label>Patient Name</Label>
                                     <Input required onChangeText={(pname) => this.setState({ pname })} value={this.state.pname} />
@@ -150,7 +176,8 @@ class PatientRegForm extends Component {
         )
     }
 }
-export default PatientRegForm;
+export default connect(mapStateToProps, mapDispatchToProps)(PatientRegForm)
+
 
 
 const styles = StyleSheet.create({

@@ -43,7 +43,7 @@ class TabsNav extends Component {
                         <Tab heading={ <TabHeading><Icon name="logo-buffer" /><Text style={{color:'#fff'}}> Reg Form</Text></TabHeading>}>
                             <PatientRegForm />
                         </Tab>
-                        <Tab heading={ <TabHeading><Icon name="ios-menu" /><Text style={{color:'#fff'}}></Text></TabHeading>}>
+                        <Tab heading={ <TabHeading><Icon name="ios-menu" /><Text style={{color:'#fff'}}>Home </Text></TabHeading>}>
                             <HomePage tabsRoute={this.props.navigation.navigate} />
                         </Tab>
                     </Tabs>
