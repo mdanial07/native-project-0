@@ -27,7 +27,7 @@ export class SignupMiddleware {
     }
     static getAllUsers() {
         return (dispatch) => {
-            firebase.database().ref('/Doctors').on('value', (data) => {
+            firebase.database().ref(`/Doctors`).on('value', (data) => {
                 let userData = data.val();
 
                 let array = [];

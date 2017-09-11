@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { Container, Header, Content, Form, Item, Input, Label, Card, CardItem, Body, Button, Toast } from 'native-base';
-import { View, Text, AsyncStorage, StyleSheet, Image } from "react-native"
+import { Container, Header, Content, Form, Item, Input, Label, Card, CardItem, Button, Toast } from 'native-base';
+import { List, ListItem, Left, Body, Segment, Right, Thumbnail, Icon} from 'native-base';
+
+import { View, Text, AsyncStorage, StyleSheet, Image, } from "react-native"
 import DatePicker from 'react-native-datepicker'
 import { connect } from "react-redux";
 import { PatientsMiddleware } from '../../store/middlewares/patientsMiddleware';
+import Hr from 'react-native-hr';
 
-// import Hr from 'react-native-hr';
+import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
+// import Icon from 'react-native-vector-icons/MaterialIcons'
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -43,135 +47,112 @@ class PatientRegForm extends Component {
 
     componentWillMount() {
         console.disableYellowBox = true;
-
-        // AsyncStorage.getItem('abc123', (err, result) => {
-        //     if (result !== null) {
-        //         let data = JSON.parse(result);
-        //         this.setState({ patient: data });
-        //         console.log(this.state.patient, 'dadadadada');
-        //         // AsyncStorage.removeItem('abc123', result);   
-        //     }
-        // });
-
     }
 
     addPatient = () => {
+        if (this.state.pname == '' || this.state.dis == '' || this.state.med == '' || this.state.cost == '') {
+            // console.log(this.props, "props")
 
-        var obj = {
-            pname: this.state.pname,
-            dis: this.state.dis,
-            med: this.state.med,
-            cost: this.state.cost,
-            // date: this.state.date,
+            Toast.show({
+                text: 'Please fill form !',
+                position: 'bottom',
+                buttonText: 'Okay'
+            });
         }
 
-        this.props.createPatient(obj)
-        
+        else {
+            var obj = {
+                pname: this.state.pname,
+                dis: this.state.dis,
+                med: this.state.med,
+                cost: this.state.cost,
+                date: this.state.date,
+            }
 
-        // var patients = this.state.patient;
-        // // this.setState({ patient: patients })
-        // if (this.state.pname == '' || this.state.dis == '' || this.state.med == '' || this.state.cost == '') {
-        //     // console.log(this.props, "props")
+            this.props.createPatient(obj);
 
-        //     Toast.show({
-        //         text: 'Please fill form !',
-        //         position: 'bottom',
-        //         buttonText: 'Okay'
-        //     });
-        // }
-        // else {
-        //     var obj = {
-        //         pname: this.state.pname,
-        //         dis: this.state.dis,
-        //         med: this.state.med,
-        //         cost: this.state.cost,
-        //         // date: this.state.date,
-        //     }
-        //     patients.push(obj)
-        //     console.log(patients);
-        //     AsyncStorage.setItem('abc123', JSON.stringify(patients));
-        //     Toast.show({
-        //         text: 'Patient has been added !',
-        //         position: 'bottom',
-        //         buttonText: 'Okay'
-        //     });
-        //     this.setState({
-        //         pname: '',
-        //         dis: '',
-        //         med: '',
-        //         cost: '',
-        //     })
-        //     // this.props.navigation.navigate('patientRoute');
-        // }
-
+            Toast.show({
+                text: 'Patient SuccessFully Added',
+                position: 'bottom',
+                buttonText: 'Okay'
+            });
+            this.setState({
+                pname: '',
+                dis: '',
+                med: '',
+                cost: '',
+            })
+        }
 
     }
 
     render() {
         return (
-            <Image source={require('../Images/bg.jpg')} style={styles.bgImage}>
+            // <Image source={require('../Images/bg.jpg')} style={styles.bgImage}>
 
+            <Container>
                 <View>
-                    <Card style={{ width: 300, marginTop: '10%' }}>
-                        <CardItem>
-                            <Body>
-                                {/* <Hr lineColor='#b3b3b3' text='Registration Form' textColor='steelblue'
-                                    textStyle={{
-                                        color: "red",
-                                        height: 20,
+                    <Header searchBar rounded>
+                        <Text style={{ color: '#fff', fontSize: 24, marginTop: 10 }}>
+                            Registration Form
+                        </Text>
+                    </Header>
+                    {/* <Hr lineColor='#b3b3b3' text='Registration Form' textColor='steelblue'
+                        textStyle={{
+                            color: "red",
+                            height: 20,
 
-                                    }} /> */}
-                                <Item floatingLabel style={{ marginTop: 10 }}>
-                                    <Label>Patient Name</Label>
-                                    <Input required onChangeText={(pname) => this.setState({ pname })} value={this.state.pname} />
-                                </Item>
-                                <Item floatingLabel style={{ marginTop: 10 }}>
-                                    <Label>Diseases</Label>
-                                    <Input onChangeText={(dis) => this.setState({ dis })} value={this.state.dis} />
-                                </Item>
-                                <Item floatingLabel style={{ marginTop: 10 }}>
-                                    <Label>Medication Provide</Label>
-                                    <Input onChangeText={(med) => this.setState({ med })} value={this.state.med} />
-                                </Item>
-                                <Item floatingLabel style={{ marginTop: 10 }}>
-                                    <Label>Cost</Label>
-                                    <Input onChangeText={(cost) => this.setState({ cost })} value={this.state.cost} />
-                                </Item>
-                                <DatePicker
-                                    style={{ width: '100%', marginTop: 20 }}
-                                    date={this.state.date}
-                                    mode="date"
-                                    placeholder="select date"
-                                    format="YYYY-MM-DD"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    customStyles={{
-                                        dateIcon: {
-                                            position: 'absolute',
-                                            left: 0,
-                                            top: 4,
-                                            marginLeft: 0
-                                        },
-                                        dateInput: {
-                                            marginLeft: 36
-                                        }
-                                        // ... You can check the source to find the other keys.
-                                    }}
-                                    onDateChange={(date) => { this.setState({ date: date }) }}
-                                />
-                                {/* <Button title="Add Patient" block onPress={this.addPatient}></Button> */}
-                                <Button block rounded style={{ backgroundColor: 'rgba(45,92,227, 0.7 )', marginLeft: '15%', marginTop: 20, width: '70%' }} onPress={this.addPatient}>
-                                    <Text style={{ color: '#fff', }} >Patient Registration</Text>
-                                </Button>
-                            </Body>
-                        </CardItem>
-                    </Card>
+                        }} /> */}
 
-                    {/* <Button title="Patient List" onPress={() => { this.props.navigation.navigate('patientRoute') }}></Button> */}
+                    <View style={styles.bgImage}>
 
+                        <Item floatingLabel style={{ marginTop: 10 }}>
+                            <Label>Patient Name</Label>
+                            <Input required onChangeText={(pname) => this.setState({ pname })} value={this.state.pname} />
+                        </Item>
+                        <Item floatingLabel style={{ marginTop: 10 }}>
+                            <Label>Diseases</Label>
+                            <Input onChangeText={(dis) => this.setState({ dis })} value={this.state.dis} />
+                        </Item>
+                        <Item floatingLabel style={{ marginTop: 10 }}>
+                            <Label>Medication Provide</Label>
+                            <Input onChangeText={(med) => this.setState({ med })} value={this.state.med} />
+                        </Item>
+                        <Item floatingLabel style={{ marginTop: 10 }}>
+                            <Label>Cost</Label>
+                            <Input onChangeText={(cost) => this.setState({ cost })} value={this.state.cost} />
+                        </Item>
+                        <DatePicker
+                            style={{ width: '100%', marginTop: 20 }}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="YYYY-MM-DD"
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 4,
+                                    marginLeft: 0
+                                },
+                                dateInput: {
+                                    marginLeft: 36
+                                }
+                            }}
+                            onDateChange={(date) => { this.setState({ date: date }) }}
+                        />
+                        <Button block rounded style={{ backgroundColor: 'rgba(45,92,227, 0.7 )', marginLeft: '15%', marginTop: 20, width: '70%' }} onPress={this.addPatient}>
+                            <Text style={{ color: '#fff', }} >Patient Registration</Text>
+                        </Button>
 
-                </View >
-            </Image>
+                    </View>
+                </View>
+
+            </Container>
+
+            //            </Image>
 
         )
     }
@@ -187,12 +168,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bgImage: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: null,
-        height: null,
-        resizeMode: 'stretch',
+        width: 300,
+        marginLeft: 40,
 
     }
 })

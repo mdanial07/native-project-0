@@ -1,27 +1,21 @@
-import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { PatientsMiddleware } from '../../store/middlewares/patientsMiddleware';
-import { StyleSheet, Text, View, } from 'react-native';
+import React, { Component } from 'react'
 import {
-    Container, Header, Content, List, ListItem, Left, Body, Segment, Right, Thumbnail, Item, Input, Icon,
-    Button, InputGroup,
+    Container,
+    Header,
+    Content, Form,
+    Item, Input,
+    Label, ListItem,
+    List, Left,
+    Body, Right,
+    Thumbnail, InputGroup,
+    Icon,
+    Tabs,
     Tab, TabHeading
 } from 'native-base';
-import Tabs from 'react-native-tabs'
+
+import { View, Text, Button, TextInput, AsyncStorage, Image, StyleSheet } from "react-native"
 import DatePicker from 'react-native-datepicker'
-
-
-function mapDispatchToProps(dispatch) {
-    return {
-        getAllPatietns: () => dispatch(PatientsMiddleware.getAllPatietns()),
-
-    }
-}
-function mapStateToProps(state) {
-    return {
-        patients: state.Patients.patients,
-    }
-}
+import Signup from '../Signup/Signup'
 
 class PatientList extends Component {
 
@@ -29,35 +23,55 @@ class PatientList extends Component {
         super(props);
         var today = new Date();
         var todayDate = today.toISOString().substring(0, 10);
-        this.state = { search: '', page: 'second', date: todayDate }
+        this.state = { email: '', pass: '', patients: [], search: '', date: todayDate, }
     }
+
     static navigationOptions = {
+        title: 'Patients',
         header: null,
     }
 
     componentWillMount() {
-
-        this.props.getAllPatietns();
         console.disableYellowBox = true;
+
+        AsyncStorage.getItem('abc123', (err, result) => {
+            if (result !== null) {
+                let data = JSON.parse(result);
+                this.setState({ patients: data });
+                console.log(this.state.patients);
+            }
+        });
+        this.setState({ date: '' })
+        console.log(this.state.date)
     }
 
-    render() {
-        console.log(this.props.patients)
+    componentWillReceiveProps() {
+        AsyncStorage.getItem('abc123', (err, result) => {
+            if (result !== null) {
+                let data = JSON.parse(result);
+                this.setState({ patients: data });
+                console.log(this.state.patients);
+            }
+        });
+        this.setState({ date: '' })
+        console.log(this.state.date)
+    }
 
-        let patientsbyName = this.props.patients.filter((patient) => {
+
+    render() {
+
+        let patientsbyName = this.state.patients.filter((patient) => {
             return (
                 patient.pname.toLocaleLowerCase().indexOf(this.state.search.toLocaleLowerCase()) !== -1
             )
         });
 
-        let patientsbyDate = this.props.patients.filter((patient) => {
-            return (
-                patient.date.toLocaleLowerCase().indexOf(this.state.date.toLocaleLowerCase()) !== -1
-            )
-        });
+        // let patientsbyDate = this.state.patients.filter((patient) => {
+        //     return (
+        //         patient.date.toLocaleLowerCase().indexOf(this.state.date.toLocaleLowerCase()) !== -1
+        //     )
+        // });
 
-
-        console.log(patientsbyName)
         return (
             <Container>
                 <Tabs>
@@ -75,7 +89,7 @@ class PatientList extends Component {
                                 patientsbyName.map((pat, i) => {
                                     return (<ListItem avatar key={i}>
                                         <Left>
-                                            <Thumbnail
+                                            <Image
                                                 style={{ width: 50, height: 50 }}
                                                 source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
                                             />
@@ -128,7 +142,7 @@ class PatientList extends Component {
                                 patientsbyDate.map((pat, i) => {
                                     return (<ListItem avatar key={i}>
                                         <Left>
-                                            <Thumbnail
+                                            <Image
                                                 style={{ width: 50, height: 50 }}
                                                 source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
                                             />
@@ -148,40 +162,8 @@ class PatientList extends Component {
                     </Tab>
                 </Tabs>
             </Container>
-        );
-
-        //     <Footer>
-        //     <FooterTab>
-        //         <Button vertical active>
-        //             <Icon active name="navigate" />
-        //             <Text>Patients</Text>
-        //         </Button>
-        //         <Button vertical>
-        //             <Icon name="camera" />
-        //             <Text>Reg. Form</Text>
-        //         </Button>
-        //         <Button vertical>
-        //             <Icon name="person" />
-        //             <Text>Contact</Text>
-        //         </Button>
-        //         <Button vertical onPress={() => { this.props.navigation.navigate('signup') }} >
-        //             {/* <PatientList /> */}
-        //             <Icon name="person" />
-        //             <Text>Profile</Text>
-        //         </Button>
-        //     </FooterTab>
-        // </Footer>
+        )
     }
 }
+export default PatientList;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientList)
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-});

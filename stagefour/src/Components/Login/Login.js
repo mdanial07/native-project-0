@@ -1,6 +1,24 @@
 import React, { Component } from 'react'
-import { Container, Header, Title, Button, Content, Form, Icon, Item, Input, Label, Footer } from 'native-base';
+import { Container, Header, Title, Button, Content, Form, Icon, Item, Input, Label, Toast, Footer } from 'native-base';
 import { View, Text, AsyncStorage, Image, StyleSheet, TextInput } from "react-native"
+import { LoginMiddleware } from '../../store/middlewares/loginMiddleware'
+import { connect } from "react-redux";
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loginUser: (props, doctor) => dispatch(LoginMiddleware.loginUser(props, doctor)),
+        getAllDoctors: (email) => dispatch(LoginMiddleware.getAllDoctors(email)),
+
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+
+    }
+}
+
 class Login extends Component {
 
     constructor(props) {
@@ -13,32 +31,38 @@ class Login extends Component {
     }
     componentWillMount() {
         console.disableYellowBox = true;
-        AsyncStorage.getItem('users', (err, result) => {
-
+        AsyncStorage.getItem('patientapp', (err, result) => {
             if (result !== null) {
-                let data = JSON.parse(result);
-                this.setState({ user: data });
-                console.log(this.state.user, 'dadadadada');
-                // AsyncStorage.removeItem('abc123', result);   
+                AsyncStorage.removeItem('patientapp', result);
             }
         });
     }
     loginCheck = () => {
-        var userExist = false;
-        var users = this.state.user;
 
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].email === this.state.email && users[i].pass === this.state.pass) {
-                userExist = true;
-            }
-        }
+        if (this.state.email == '' || this.state.pass == '') {
+            // console.log(this.props, "props")
 
-        if (userExist === true) {
-            console.log('User Successfully Login !')
-            // this.props.navigation.navigate('tabsRoute')
+            Toast.show({
+                text: 'Enter Email and Password !',
+                position: 'bottom',
+                buttonText: 'Okay'
+            });
         }
         else {
-            console.log('Login Failed !')
+            var email = this.state.email;
+            var pass = this.state.pass;
+
+            var doctor = {
+                email: email,
+                pass: pass,
+            }
+            console.log(doctor)
+            this.props.loginUser(this.props, doctor)
+            this.props.getAllDoctors(email);
+            this.setState({
+                email: '',
+                pass: '',
+            })
         }
     }
 
@@ -47,26 +71,26 @@ class Login extends Component {
             <Image source={require('../Images/bg1.jpg')} style={styles.bgImage}>
                 <Container >
                     <Content style={{ width: 240, marginTop: 200 }} >
-                            <TextInput
-                                style={{ height: 40, color: '#fff' }}
-                                placeholder="Username"
-                                placeholderTextColor="white"
-                                onChangeText={(email) => this.setState({ email })}
-                                underlineColorAndroid='#fff'
-                                required
-                            />
-                            <TextInput
-                                style={{ height: 40, color: '#fff' }}
-                                placeholder="Password"
-                                placeholderTextColor="white"
-                                onChangeText={(pass) => this.setState({ pass })}
-                                underlineColorAndroid='#fff'
-                                secureTextEntry={true}    
-                            />
-                            <Button block rounded style={{ marginTop: 20, backgroundColor: 'rgba(255,255,255, 0.3 )', padding: 10, width: 240 }} onPress={this.loginCheck}>
-                                <Text style={{ color: '#fff', }} >Login</Text>
-                            </Button>
-                            <Text style={{ color: '#fff', fontSize: 12, textAlign: 'center', marginTop: 10 }}> Forgot your login details?<Text style={{ fontWeight: 'bold', }}> Get login help.</Text> </Text>
+                        <TextInput
+                            style={{ height: 40, color: '#fff' }}
+                            placeholder="Email Address"
+                            placeholderTextColor="white"
+                            onChangeText={(email) => this.setState({ email })}
+                            underlineColorAndroid='#fff'
+                            required
+                        />
+                        <TextInput
+                            style={{ height: 40, color: '#fff' }}
+                            placeholder="Password"
+                            placeholderTextColor="white"
+                            onChangeText={(pass) => this.setState({ pass })}
+                            underlineColorAndroid='#fff'
+                            secureTextEntry={true}
+                        />
+                        <Button block rounded style={{ marginTop: 20, backgroundColor: 'rgba(255,255,255, 0.3 )', padding: 10, width: 240 }} onPress={this.loginCheck}>
+                            <Text style={{ color: '#fff', }} >Login</Text>
+                        </Button>
+                        <Text style={{ color: '#fff', fontSize: 12, textAlign: 'center', marginTop: 10 }}> Forgot your login details?<Text style={{ fontWeight: 'bold', }}> Get login help.</Text> </Text>
                     </Content>
                     <Footer style={{ height: 100 }}>
                         <Button block rounded style={{ backgroundColor: 'rgba(45,92,227, 0.7 )', padding: 10, width: 240 }} onPress={() => { this.props.navigation.navigate('signup') }}>
@@ -81,7 +105,10 @@ class Login extends Component {
         )
     }
 }
-export default Login;
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
+
 
 
 
