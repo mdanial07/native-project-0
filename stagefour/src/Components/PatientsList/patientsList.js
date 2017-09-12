@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { PatientsMiddleware } from '../../store/middlewares/patientsMiddleware';
-import { StyleSheet, Text, View, } from 'react-native';
+import { StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import {
     Container, Header, Content, List, ListItem, Left, Body, Segment, Right, Thumbnail, Item, Input, Icon,
     Button, InputGroup,
@@ -13,7 +13,7 @@ import DatePicker from 'react-native-datepicker'
 
 function mapDispatchToProps(dispatch) {
     return {
-        getAllPatietns: () => dispatch(PatientsMiddleware.getAllPatietns()),
+        getAllPatietns: (docID) => dispatch(PatientsMiddleware.getAllPatietns(docID)),
 
     }
 }
@@ -36,9 +36,16 @@ class PatientList extends Component {
     }
 
     componentWillMount() {
-
-        this.props.getAllPatietns();
         console.disableYellowBox = true;
+
+        AsyncStorage.getItem('patientapp', (err, result) => {
+            if (result !== null) {
+                console.log(result)
+                let data = JSON.parse(result);
+                var abc = data._id;
+                this.props.getAllPatietns(abc);
+            }
+        });
     }
 
     render() {
@@ -50,103 +57,49 @@ class PatientList extends Component {
             )
         });
 
-        let patientsbyDate = this.props.patients.filter((patient) => {
-            return (
-                patient.date.toLocaleLowerCase().indexOf(this.state.date.toLocaleLowerCase()) !== -1
-            )
-        });
+        // let patientsbyDate = this.props.patients.filter((patient) => {
+        //     return (
+        //         patient.date.toLocaleLowerCase(). indexOf(this.state.date.toLocaleLowerCase()) !== -1
+        //     )
+        // });
 
 
         console.log(patientsbyName)
         return (
             <Container>
-                <Tabs>
-                    <Tab heading={<TabHeading><Icon name="ios-search-outline" /><Text style={{ color: '#fff' }}> Search by Name</Text></TabHeading>} >
-                        <Header searchBar rounded>
-                            <Item>
-                                <Icon name="ios-search" />
-                                <Input placeholder="Search...." style={{ marginTop: 10 }} onChangeText={(search) => this.setState({ search })} />
-                                <Icon name="ios-people" />
-                            </Item>
-                        </Header>
-                        <List>
+                <View>
+                    <Header searchBar rounded>
+                        <Item>
+                            <Icon name="ios-search" />
+                            <Input placeholder="Search...." style={{ marginTop: 10 }} onChangeText={(search) => this.setState({ search })} />
+                            <Icon name="ios-people" />
+                        </Item>
+                    </Header>
+                    <List>
 
-                            {
-                                patientsbyName.map((pat, i) => {
-                                    return (<ListItem avatar key={i}>
-                                        <Left>
-                                            <Thumbnail
-                                                style={{ width: 50, height: 50 }}
-                                                source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
-                                            />
-                                        </Left>
-                                        <Body>
-                                            <Text>{pat.pname}</Text>
-                                            <Text note>Diseases: {pat.dis}</Text>
-                                        </Body>
-                                        <Right>
-                                            <Text note>{pat.date}</Text>
-                                        </Right>
-                                    </ListItem>
-                                    )
-                                })
-                            }
-                        </List>
-                    </Tab>
-                    <Tab heading={<TabHeading><Icon name="md-calendar" /><Text style={{ color: '#fff' }}> Search by Date</Text></TabHeading>} >
-                        <Header searchBar rounded>
-                            <Item>
-                                <DatePicker
-                                    style={{ width: '90%' }}
-                                    date={this.state.date}
-                                    mode="date"
-                                    placeholder="select date"
-                                    format="YYYY-MM-DD"
-                                    confirmBtnText="Confirm"
-                                    cancelBtnText="Cancel"
-                                    customStyles={{
-                                        dateIcon: {
-                                            position: 'absolute',
-                                            left: 0,
-                                            top: 4,
-                                            marginLeft: 0
-                                        },
-                                        dateInput: {
-                                            marginLeft: 36
-                                        }
-                                        // ... You can check the source to find the other keys.
-                                    }}
-                                    onDateChange={(d) => { this.setState({ date: d }) }}
-                                />
-                                <Icon name="ios-search" />
-                                {/* <Input placeholder="Search" onChangeText={(search) => this.setState({ search })} />
-                                    <Icon name="ios-people" /> */}
-                            </Item>
-                        </Header>
-                        {/* <List>
-                            {
-                                patientsbyDate.map((pat, i) => {
-                                    return (<ListItem avatar key={i}>
-                                        <Left>
-                                            <Thumbnail
-                                                style={{ width: 50, height: 50 }}
-                                                source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
-                                            />
-                                        </Left>
-                                        <Body>
-                                            <Text>{pat.pname}</Text>
-                                            <Text note>Diseases: {pat.dis}</Text>
-                                        </Body>
-                                        <Right>
-                                            <Text note>{pat.date}</Text>
-                                        </Right>
-                                    </ListItem>
-                                    )
-                                })
-                            }
-                        </List> */}
-                    </Tab>
-                </Tabs>
+                        {
+                            patientsbyName.map((pat, i) => {
+                                return (<ListItem avatar key={i}>
+                                    <Left>
+                                        <Thumbnail
+                                            style={{ width: 50, height: 50 }}
+                                            source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
+                                        />
+                                    </Left>
+                                    <Body>
+                                        <Text>{pat.pname}</Text>
+                                        <Text note>Diseases: {pat.dis}</Text>
+                                    </Body>
+                                    <Right>
+                                        <Text note>{pat.date}</Text>
+                                    </Right>
+                                </ListItem>
+                                )
+                            })
+                        }
+                    </List>
+
+                </View>
             </Container>
         );
 

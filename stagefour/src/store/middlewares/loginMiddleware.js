@@ -2,25 +2,37 @@
 import * as firebase from "firebase";
 import LoginAction from '../actions/loginAction'
 import { AsyncStorage } from 'react-native'
+import { Toast } from 'native-base';
 
 export class LoginMiddleware {
     static loginUser(props, doctors) {
         console.log(props);
         return (dispatch) => {
             // firebase.database().ref('patientsApp/').push({ doctors });
-
+   console.log(doctors)
             let email = doctors.email
             let pass = doctors.pass;
             firebase.auth().signInWithEmailAndPassword(email, pass)
-                .then(() => {
-                    // console.log("dadnadiadadadadad")
-                    props.navigation.navigate('homePage')
+                .then((user) => {
+                    console.log(user)
+                    Toast.show({
+                        text: 'Successfully Login !',
+                        position: 'bottom',
+                        buttonText: 'Okay'
+                    });
+                    props.navigation.navigate('tabnavigation')
                 })
                 .catch(function (error) {
                     // Handle Errors here.
                     var errorCode = error.code;
                     var errorMessage = error.message;
+                    console.log(errorMessage)
                     // ...
+                    Toast.show({
+                        text: errorMessage,
+                        position: 'bottom',
+                        buttonText: 'Okay'
+                    });
                 });
         }
     }
@@ -51,20 +63,19 @@ export class LoginMiddleware {
                         )
                     }
                 })
+                
+                console.log(sortData);
+                AsyncStorage.setItem('patientapp', JSON.stringify(sortData))
+                console.log(array)
+                dispatch(LoginAction.getDoctors(array));
 
-                var sortArray = []
-
-                sortArray.push(sortData);
-
+                // var sortArray = []
+                // sortArray.push(sortData);
                 // AsyncStorage.getItem('patientapp', (err, result) => {
                 //     if (result !== null) {
                 //         AsyncStorage.removeItem('patientapp', result);
                 //     }
                 // });
-                console.log(sortData);
-                AsyncStorage.setItem('patientapp', JSON.stringify(sortData))
-                console.log(array)
-                dispatch(LoginAction.getDoctors(array));
             })
         }
     }

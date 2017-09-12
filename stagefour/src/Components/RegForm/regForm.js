@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Header, Content, Form, Item, Input, Label, Card, CardItem, Button, Toast } from 'native-base';
-import { List, ListItem, Left, Body, Segment, Right, Thumbnail, Icon} from 'native-base';
-
+import { List, ListItem, Left, Body, Segment, Right, Thumbnail, Icon } from 'native-base';
 import { View, Text, AsyncStorage, StyleSheet, Image, } from "react-native"
 import DatePicker from 'react-native-datepicker'
 import { connect } from "react-redux";
@@ -36,6 +35,7 @@ class PatientRegForm extends Component {
             cost: '',
             date: todayDate,
             patient: [],
+            docID: '',
             showToast: false
         }
     }
@@ -47,6 +47,13 @@ class PatientRegForm extends Component {
 
     componentWillMount() {
         console.disableYellowBox = true;
+        AsyncStorage.getItem('patientapp', (err, result) => {
+            if (result !== null) {
+                console.log(result)
+                let data = JSON.parse(result);
+                this.setState({ docID: data._id })
+            }
+        });
     }
 
     addPatient = () => {
@@ -67,6 +74,7 @@ class PatientRegForm extends Component {
                 med: this.state.med,
                 cost: this.state.cost,
                 date: this.state.date,
+                docId: this.state.docID,
             }
 
             this.props.createPatient(obj);

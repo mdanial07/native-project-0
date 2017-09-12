@@ -3,6 +3,7 @@ import { Container, Header, Title, Button, Content, Form, Icon, Item, Input, Lab
 import { View, Text, AsyncStorage, Image, StyleSheet, TextInput } from "react-native"
 import { LoginMiddleware } from '../../store/middlewares/loginMiddleware'
 import { connect } from "react-redux";
+import * as firebase from "firebase";
 
 
 function mapDispatchToProps(dispatch) {
@@ -31,11 +32,19 @@ class Login extends Component {
     }
     componentWillMount() {
         console.disableYellowBox = true;
+
         AsyncStorage.getItem('patientapp', (err, result) => {
             if (result !== null) {
-                AsyncStorage.removeItem('patientapp', result);
+                let data = JSON.parse(result);
+                var email = data.email;
+                var pass = data.pass;
+                firebase.auth().signInWithEmailAndPassword(email, pass)
+                    .then((user) => {
+                        this.props.navigation.navigate('tabnavigation')
+                    })
             }
         });
+
     }
     loginCheck = () => {
 

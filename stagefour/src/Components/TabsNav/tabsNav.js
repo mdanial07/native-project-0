@@ -24,87 +24,102 @@ class TabsNav extends Component {
 
 
         return (
-            <Container>
-                {
-                    this.state.onClickbutton === 'patientList' ? <PatientList /> : this.state.onClickbutton === 'reg-form' ? <PatientRegForm /> : this.state.onClickbutton === 'homePage' ? <HomePage /> : null
-                }
 
-                <Content>
-                    {/* <Tabs>
-                        <Tab heading={<TabHeading><Icon name="person" /><Text>Patients</Text></TabHeading>}>
-                            <PatientList />
-                        </Tab>
-                        <Tab heading={<TabHeading><Icon name="apps" /></TabHeading>}>
-                            <HomePage />
-                        </Tab>
-                        <Tab heading={<TabHeading><Text>Reg Form</Text></TabHeading>}>
-                            <PatientRegForm />
-                        </Tab>
-                    </Tabs> */}
-                </Content>
-                <BottomNavigation
-                    labelColor="white"
-                    rippleColor="white"
-                    style={{ height: 56, elevation: 8, position: 'absolute', left: 0, bottom: 0, right: 0 }}
-                    
-                >
-                    <Tab
-                        barBackgroundColor="#37474F"
-                        label="Movies & TV"
-                        icon={<Icon size={24} color="white" name="tv" />}
-                        onPress={() => this.setState({ onClickbutton: 'patientList' })}
-                    >
-
+            <Container>     
+                <Tabs initialPage={1}>
+                    <Tab heading="Tab2">
+                        <PatientRegForm />
                     </Tab>
-                    <Tab
-                        barBackgroundColor="#37474F"
-                        label="Music"
-                        icon={<Icon size={24} color="white" name="music-note"/>}
-                        onPress={() => this.setState({ onClickbutton: 'reg-form' })}
-                    >
-
+                    <Tab heading="Tab1">
+                        <PatientList />
                     </Tab>
-
-                    <Tab
-                        barBackgroundColor="#37474F"
-                        label="Books"
-                        icon={<Icon size={24} color="white" name="book" />}
-                    >
-
-                    </Tab>
-
-                    <Tab
-                        barBackgroundColor="#37474F"
-                        label="Newsstand"
-                        icon={<Icon size={24} color="white" name="newspaper" />}
-                    >
+                    <Tab heading="Tab3">
                         <HomePage />
                     </Tab>
-
-
-                </BottomNavigation>
-
-                {/* <Footer>
-                    <FooterTab>
-                        <Button vertical active onPress={() => this.setState({ onClickbutton: 'patientList' })} >
-                            <Icon active name="navigate" />
-                            <Text>Patients</Text>
-                        </Button>
-                        <Button vertical onPress={() => this.setState({ onClickbutton: 'reg-form' })}>
-                            <Icon name="camera" />
-                            <Text>Reg. Form</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="person" onPress={() => { this.props.navigation.navigate('homePage') }} />
-                            <Text>Contact</Text>
-                        </Button>
-                        <Button vertical onPress={() => this.setState({ onClickbutton: 'homePage' })}  >
-                            <Icon name="person" />
-                            <Text>Profile</Text>
-                        </Button>
-                    </FooterTab>
-                </Footer> */}
+                </Tabs>
             </Container>
+
+            // <Container>
+            /* {
+                    this.state.onClickbutton === 'patientList' ? <PatientList /> : this.state.onClickbutton === 'reg-form' ? <PatientRegForm /> : this.state.onClickbutton === 'homePage' ? <HomePage /> : null
+                } */
+
+            //   <Content>
+            //<Tabs>
+            // <Tab heading={<TabHeading><Icon name="person" /><Text>Patients</Text></TabHeading>}>
+            //  <PatientList />
+            // </Tab>
+            //<Tab heading={<TabHeading><Icon name="apps" /></TabHeading>}>
+            //<HomePage />
+            // </Tab>
+            //  {/* <Tab heading={<TabHeading><Icon name="apps" /><Text>Reg Form</Text></TabHeading>}>
+            //   <PatientRegForm />
+            //// </Tab> */}
+            //    </Tabs>
+            // </Content>
+            /* <BottomNavigation
+                 labelColor="white"
+                 rippleColor="white"
+                 style={{ height: 56, elevation: 8, position: 'absolute', left: 0, bottom: 0, right: 0 }}
+                 
+                 >
+                 <Tab
+                     barBackgroundColor="#37474F"
+                     label="Movies & TV"
+                     icon={<Icon size={24} color="white" name="tv" />}
+                     onPress={() => this.setState({ onClickbutton: 'patientList' })}
+                 >
+
+                 </Tab>
+                 <Tab
+                     barBackgroundColor="#37474F"
+                     label="Music"
+                     icon={<Icon size={24} color="white" name="music-note"/>}
+                     onPress={() => this.setState({ onClickbutton: 'reg-form' })}
+                 >
+
+                 </Tab>
+
+                 <Tab
+                     barBackgroundColor="#37474F"
+                     label="Books"
+                     icon={<Icon size={24} color="white" name="book" />}
+                 >
+
+                 </Tab>
+
+                 <Tab
+                     barBackgroundColor="#37474F"
+                     label="Newsstand"
+                     icon={<Icon size={24} color="white" name="newspaper" />}
+                 >
+                     <HomePage />
+                 </Tab>
+
+
+             </BottomNavigation> */
+
+            /* <Footer>
+                <FooterTab>
+                    <Button vertical active onPress={() => this.setState({ onClickbutton: 'patientList' })} >
+                        <Icon active name="navigate" />
+                        <Text>Patients</Text>
+                    </Button>
+                    <Button vertical onPress={() => this.setState({ onClickbutton: 'reg-form' })}>
+                        <Icon name="camera" />
+                        <Text>Reg. Form</Text>
+                    </Button>
+                    <Button vertical>
+                        <Icon name="person" onPress={() => { this.props.navigation.navigate('homePage') }} />
+                        <Text>Contact</Text>
+                    </Button>
+                    <Button vertical onPress={() => this.setState({ onClickbutton: 'homePage' })}  >
+                        <Icon name="person" />
+                        <Text>Profile</Text>
+                    </Button>
+                </FooterTab>
+            </Footer> */
+            //  </Container>
         )
     }
 }
