@@ -20,14 +20,14 @@ class TabNavigation extends Component {
 
             <Container>
                 <Tabs initialPage={1}>
-                    <Tab heading={<TabHeading><Icon name="person" /><Text>Patients</Text></TabHeading>}>
+                    <Tab heading={<TabHeading><Icon name="ios-people" /><Text>Patients</Text></TabHeading>}>
                         <PatientList />
                     </Tab>
-                    <Tab heading={<TabHeading><Icon name="person" /><Text>Reg Form</Text></TabHeading>}>
+                    <Tab heading={<TabHeading><Icon name="wpforms" /><Text>Reg Form</Text></TabHeading>}>
                         <PatientRegForm />
                     </Tab>
                     <Tab heading={<TabHeading><Icon name="person" /><Text>Profile</Text></TabHeading>}>
-                        <Profile />
+                        <Profile navigation={this.props.navigation} />
                     </Tab>
                 </Tabs>
             </Container>

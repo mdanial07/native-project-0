@@ -9,7 +9,7 @@ export class LoginMiddleware {
         console.log(props);
         return (dispatch) => {
             // firebase.database().ref('patientsApp/').push({ doctors });
-   console.log(doctors)
+            console.log(doctors)
             let email = doctors.email
             let pass = doctors.pass;
             firebase.auth().signInWithEmailAndPassword(email, pass)
@@ -34,6 +34,15 @@ export class LoginMiddleware {
                         buttonText: 'Okay'
                     });
                 });
+        }
+    }
+
+    static logoutUser(props) {
+        return (dispatch) => {
+
+            AsyncStorage.removeItem('patientapp')
+            props.navigation.navigate("login")
+
         }
     }
 
@@ -63,7 +72,7 @@ export class LoginMiddleware {
                         )
                     }
                 })
-                
+
                 console.log(sortData);
                 AsyncStorage.setItem('patientapp', JSON.stringify(sortData))
                 console.log(array)

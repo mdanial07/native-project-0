@@ -66,6 +66,7 @@ class Login extends Component {
                 pass: pass,
             }
             console.log(doctor)
+            
             this.props.loginUser(this.props, doctor)
             this.props.getAllDoctors(email);
             this.setState({
@@ -101,7 +102,7 @@ class Login extends Component {
                         </Button>
                         <Text style={{ color: '#fff', fontSize: 12, textAlign: 'center', marginTop: 10 }}> Forgot your login details?<Text style={{ fontWeight: 'bold', }}> Get login help.</Text> </Text>
                     </Content>
-                    <Footer style={{ height: 100 }}>
+                    <Footer style={{ backgroundColor: 'none',height: 100 }}>
                         <Button block rounded style={{ backgroundColor: 'rgba(45,92,227, 0.7 )', padding: 10, width: 240 }} onPress={() => { this.props.navigation.navigate('signup') }}>
                             <Text style={{ color: '#fff', }} >Create an account </Text>
                         </Button>
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bgImage: {
+        
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',

@@ -8,14 +8,16 @@ import PatientRegForm from "./Components/RegForm/regForm"
 import PatientList from "./Components/PatientsList/patientsList"
 import TabNavigation from "./Components/TabsNav/tabNavigation"
 import Profile from './Components/Profile/profile'
+import Profilee from './Components/Profile/profilee'
 // import PatientList from "./Components/PatientsList/patientssList"
 import TabsNav from './Components/TabsNav/tabsNav'
 
 const Naviagte = StackNavigator({
     login: { screen: Login },
-    profile: {screen: Profile},
-    patientList: { screen: PatientList },   
     tabnavigation: { screen: TabNavigation },
+    profile: {screen: Profile},
+    profilee: {screen: Profilee},
+    patientList: { screen: PatientList },   
     tabsnav: { screen: TabsNav },
     regFrom: { screen: PatientRegForm },
     homePage: { screen: HomePage },

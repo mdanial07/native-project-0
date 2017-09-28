@@ -90,13 +90,15 @@ class PatientList extends Component {
                                     return (<ListItem avatar key={i}>
                                         <Left>
                                             <Image
-                                                style={{ width: 50, height: 50 }}
+                                                style={{ width: 80, height: 80 }}
                                                 source={{ uri: 'https://www.arthrosurface.com/wp-content/uploads/2013/05/SurgeonPatient.png' }}
                                             />
                                         </Left>
                                         <Body>
-                                            <Text>{pat.pname}</Text>
-                                            <Text note>Diseases: {pat.dis}</Text>
+                                            <Text style={{fontWeight: 'bold',fontSize: 14 }}>{pat.pname}</Text>
+                                            <Text note style={{fontSize: 10 }}>Diseases: {pat.dis}</Text>
+                                            <Text note style={{fontSize: 10 }}>Medication: {pat.med}</Text>
+                                            <Text note style={{fontSize: 10 }}>Cost: {pat.cost}</Text>
                                         </Body>
                                         <Right>
                                             <Text note>{pat.date}</Text>

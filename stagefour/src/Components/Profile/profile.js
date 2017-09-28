@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { Container, Header, Content, List, Right, Left, ListItem, Icon, Switch, Thumbnail, Text, Separator, Body, TabHeading, } from 'native-base';
-
 import { View, AsyncStorage, Image, StyleSheet, TextInput } from "react-native"
 import { connect } from 'react-redux';
-
+import { LoginMiddleware } from '../../store/middlewares/loginMiddleware';
 
 
 function mapDispatchToProps(dispatch) {
     return {
-
+        logoutUser: (props) => dispatch(LoginMiddleware.logoutUser(props))
     }
 }
 
@@ -32,7 +31,7 @@ class Profile extends Component {
 
     componentWillMount() {
         console.disableYellowBox = true;
-
+        console.log(this.props)
         AsyncStorage.getItem('patientapp', (err, result) => {
             if (result !== null) {
                 console.log(result)
@@ -45,16 +44,15 @@ class Profile extends Component {
         });
     }
 
-    addPatient = () => {
-
-        AsyncStorage.getItem('patientapp', (err, result) => {
-            if (result !== null) {
-                AsyncStorage.removeItem('patientapp', result)
-                this.props.navigation.navigate("login")
-            }
-        });
-        console.log("dadada");
+    logout = () => {
+        this.props.logoutUser(this.props)
     }
+
+    profile = () => {
+        this.props.navigation.navigate('profilee')
+    }
+
+
 
     render() {
         console.log(this.state.Doctor)
@@ -62,7 +60,7 @@ class Profile extends Component {
             <Container>
                 <Content>
                     <List>
-                        <ListItem>
+                        <ListItem >
                             <Thumbnail square size={80} source={{ uri: 'https://scontent.fkhi9-1.fna.fbcdn.net/v/t1.0-9/21432894_1192746394162794_1096900880755878585_n.jpg?oh=ef1d58816ee341804cbcd9f366528413&oe=5A5314D1' }} />
                             {
                                 this.state.Doctor.map((doc, i) => {
@@ -74,7 +72,7 @@ class Profile extends Component {
                                 })
                             }
                             <Right>
-                                <Text note>veiw</Text>
+                                <Text onPress={this.profile} note>veiw</Text>
                             </Right>
                         </ListItem>
 
@@ -158,7 +156,7 @@ class Profile extends Component {
                                 <Icon name="arrow-forward" />
                             </Right>
                         </ListItem>
-                        <ListItem onPress={this.addPatient}>
+                        <ListItem onPress={this.logout}>
                             <Thumbnail
                                 avatar
                                 style={{ width: 50, height: 50 }}
